@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: buddy-market
+  datasource:
+    url: jdbc:mysql://localhost:3306/buddy-market
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        default_batch_fetch_size: 1000
+        show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+
+server:
+  error:
+    include-stacktrace: always
+    include-message: always
+
+logging:
+  level:
+    org:
+      hibernate:
+        orm:
+          jdbc:
+            bind:
+              trace
+      springframework:
+        cache: TRACE

@@ -1,0 +1,58 @@
+server:
+  port: 7777
+  error:
+    include-stacktrace: on_param
+    include-message: always
+  tomcat:
+    accesslog:
+      enabled: true
+spring:
+#  flyway:
+#    enabled: false
+#    baseline-on-migrate: false
+  sql:
+    init:
+      mode: always
+  application:
+    name: buddy-market
+  jpa:
+    generate-ddl: true
+    show-sql: false
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        default_batch_fetch_size: 1000
+        show_sql: false
+        format_sql: false
+        order_updates: true
+        order_inserts: true
+        jdbc:
+          batch_size: 1000
+    open-in-view: false
+
+  h2:
+    console:
+      enabled: true
+
+
+  profiles:
+    active: local
+
+jwt:
+  secretKey: test
+  jwtExpiresMS: 86400000
+
+
+#logging:
+#  pattern:
+#    level: '%5p [${spring.application.name:},%mdc{trace_id:-},%mdc{span_id:-}]'
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+
+
