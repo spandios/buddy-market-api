@@ -3,7 +3,7 @@ package com.alpaca.buddymarket.post.sale
 import MyException
 import com.alpaca.buddymarket.config.exception.ErrorCode
 import com.alpaca.buddymarket.post.dto.base.BasePostUpdateDto
-import com.alpaca.buddymarket.post.entity.AbstractPost
+import com.alpaca.buddymarket.post.entity.Post
 import com.alpaca.buddymarket.post.entity.PostSale
 import org.springframework.stereotype.Service
 
@@ -34,5 +34,5 @@ class SaleService(
         repository.delete(entity)
     }
 
-    fun findById(id: Long): AbstractPost? = repository.findById(id).orElse(null)
+    fun findById(id: Long): Post? = repository.findById(id).orElse(null)
 }

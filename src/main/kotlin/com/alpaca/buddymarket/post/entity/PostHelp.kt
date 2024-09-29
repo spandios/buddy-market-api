@@ -15,7 +15,7 @@ class PostHelp(
     title: String,
     content: String,
     images: List<String>?,
-) : AbstractPost(
+) : Post(
         creator = creator,
         title = title,
         content = content,

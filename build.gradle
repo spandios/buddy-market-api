@@ -52,7 +52,7 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.2")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.2")
 
-    implementation("com.vladmihalcea:hibernate-types-55:2.14.0")
+    implementation("com.vladmihalcea:hibernate-types-60:2.21.1")
     implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.8.2'
 }
 

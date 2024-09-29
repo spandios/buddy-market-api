@@ -11,7 +11,7 @@ class PostFree(
     title: String,
     content: String,
     images: List<String>? = emptyList(),
-) : AbstractPost(
+) : Post(
         creator = creator,
         title = title,
         content = content,

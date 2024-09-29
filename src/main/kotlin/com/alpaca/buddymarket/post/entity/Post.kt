@@ -5,6 +5,7 @@ import com.alpaca.buddymarket.user.entity.User
 import io.hypersistence.utils.hibernate.type.json.JsonType
 import jakarta.persistence.Column
 import jakarta.persistence.DiscriminatorColumn
+import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
@@ -22,10 +23,11 @@ import java.time.LocalDateTime
 /**
  * 단일 테이블 전략으로 상속 처리
  */
+@Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "dtype")
+@DiscriminatorColumn(name = "post_type")
 @SQLRestriction("is_deleted = false")
-abstract class AbstractPost(
+abstract class Post(
     @ManyToOne(targetEntity = User::class)
     @Comment("작성자")
     @JoinColumn(name = "creator_id") val creator: User,
