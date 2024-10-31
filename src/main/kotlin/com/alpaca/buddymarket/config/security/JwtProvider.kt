@@ -1,5 +1,6 @@
 package com.alpaca.buddymarket.config.security
 
+import com.alpaca.buddymarket.auth.dto.TokenData
 import com.alpaca.buddymarket.config.exception.ErrorCode
 import com.alpaca.buddymarket.config.exception.MyException
 import com.alpaca.buddymarket.config.properties.JwtProps
@@ -16,7 +17,8 @@ import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
 import java.security.SignatureException
 import java.time.Instant
-import java.util.*
+import java.util.Arrays
+import java.util.Date
 import java.util.stream.Collectors
 
 @Service
@@ -29,14 +31,9 @@ class JwtProvider(
 
     val key = Keys.hmacShaKeyFor(jwtProps.secretKey.toByteArray(StandardCharsets.UTF_8))
 
-    data class TokenData(
-        val accessToken: String,
-        val refreshToken: String? = null,
-    )
-
     fun generateToken(
         userId: Long,
-        authority: String,
+        authority: String = "ROLE_USER",
         withRefreshToken: Boolean = true,
     ): TokenData =
         TokenData(
@@ -66,7 +63,7 @@ class JwtProvider(
 
     fun generateRefreshToken(
         userId: Long,
-        authorities: String,
+        authorities: String = "ROLE_USER",
         expiration: Int = refreshTokenExpiration,
     ): String = generateJwtToken(userId, makeExpiration(expiration), authorities)
 
@@ -141,6 +138,8 @@ class JwtProvider(
         } catch (e: Exception) {
             throw MyException(ErrorCode.INVALID_TOKEN, e.message)
         }
+
+    fun getUserIdFromToken(token: String): Long = getBodyFromToken(token).subject.toLong()
 
     private fun makeExpiration(expiration: Int): Date = Date.from(Instant.now().plusSeconds(expiration.toLong()))
 }

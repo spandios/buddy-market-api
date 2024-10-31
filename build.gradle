@@ -61,6 +61,8 @@ dependencies {
 
     implementation("com.vladmihalcea:hibernate-types-60:2.21.1")
     implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.8.2'
+
+    implementation("net.datafaker:datafaker:1.5.0")
 }
 
 hibernate {

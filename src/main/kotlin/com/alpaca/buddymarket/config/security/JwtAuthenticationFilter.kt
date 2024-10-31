@@ -10,13 +10,17 @@ import org.springframework.web.filter.OncePerRequestFilter
 class JwtAuthenticationFilter(
     private val jwtProvider: JwtProvider,
 ) : OncePerRequestFilter() {
+    val unauthorizedUrl = arrayOf("/v1/auth")
+
+    override fun shouldNotFilter(request: HttpServletRequest): Boolean = unauthorizedUrl.any { request.requestURI.startsWith(it) }
+
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
         filterChain: FilterChain,
     ) {
         try {
-            val token = jwtProvider.extractTokenFrom(request)
+            val token = jwtProvider.extractTokenFrom(request) ?: return
 
             if (token != null && jwtProvider.validateJwtToken(token)) {
                 val authentication = jwtProvider.getAuthentication(token)

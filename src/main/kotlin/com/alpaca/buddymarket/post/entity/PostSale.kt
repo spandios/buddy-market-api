@@ -8,8 +8,8 @@ import jakarta.persistence.Entity
 @Entity(name = "post_sale")
 @DiscriminatorValue("SALE")
 class PostSale(
-    price: Int,
     creator: User,
+    price: Int,
     title: String,
     content: String,
     images: List<String>?,

@@ -1,8 +1,8 @@
 package com.alpaca.buddymarket.auth
 
-import com.alpaca.buddymarket.auth.dto.AppleLoginRequest
-import com.alpaca.buddymarket.auth.dto.KakaoLoginRequest
-import com.alpaca.buddymarket.auth.dto.SnsLoginRequest
+import com.alpaca.buddymarket.auth.dto.RefreshTokenRequest
+import com.alpaca.buddymarket.auth.dto.SocialLoginRequest
+import com.alpaca.buddymarket.auth.dto.TokenData
 import com.alpaca.buddymarket.config.exception.ErrorCode
 import com.alpaca.buddymarket.config.exception.MyException
 import com.alpaca.buddymarket.config.security.JwtProvider
@@ -14,7 +14,7 @@ class AuthService(
     private val userRepository: UserRepository,
     private val jwtProvider: JwtProvider,
 ) {
-    fun kakaoLogin(req: KakaoLoginRequest): JwtProvider.TokenData {
+    fun socialLogin(req: SocialLoginRequest): TokenData {
         val existUser = userRepository.findBySnsId(req.snsId)
 
         return existUser?.let {
@@ -24,17 +24,7 @@ class AuthService(
         }
     }
 
-    fun appleLogin(req: AppleLoginRequest): JwtProvider.TokenData {
-        val existUser = userRepository.findBySnsId(req.snsId)
-
-        return existUser?.let {
-            jwtProvider.generateToken(it.id, existUser.authority)
-        } ?: run {
-            signUp(req)
-        }
-    }
-
-    private fun signUp(req: SnsLoginRequest): JwtProvider.TokenData {
+    private fun signUp(req: SocialLoginRequest): TokenData {
         if (isUserAlreadyExists(req.snsId)) {
             throw MyException(ErrorCode.USER_ALREADY_EXISTS)
         }
@@ -43,5 +33,16 @@ class AuthService(
         return jwtProvider.generateToken(user.id, user.authority)
     }
 
-    private fun isUserAlreadyExists(snsId: String): Boolean = userRepository.existsBySnsId(snsId)
+    private fun isUserAlreadyExists(snsId: String): Boolean = userRepository.findBySnsId(snsId) != null
+
+    fun refreshToken(req: RefreshTokenRequest): String {
+        if (!jwtProvider.validateJwtToken(req.refreshToken)) {
+            throw MyException(ErrorCode.INVALID_TOKEN)
+        }
+
+        val userId = jwtProvider.getUserIdFromToken(req.refreshToken)
+        val user = userRepository.findById(userId).orElseThrow { MyException(ErrorCode.USER_NOT_FOUND) }
+
+        return jwtProvider.generateAccessToken(user.id, user.authority)
+    }
 }

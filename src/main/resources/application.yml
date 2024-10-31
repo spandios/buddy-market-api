@@ -7,9 +7,9 @@ server:
     accesslog:
       enabled: true
 spring:
-#  flyway:
-#    enabled: false
-#    baseline-on-migrate: false
+  #  flyway:
+  #    enabled: false
+  #    baseline-on-migrate: false
   sql:
     init:
       mode: always
@@ -30,6 +30,9 @@ spring:
         jdbc:
           batch_size: 1000
     open-in-view: false
+  mvc:
+    problemdetails:
+      enabled: true
 
   h2:
     console:
@@ -40,8 +43,9 @@ spring:
     active: local
 
 jwt:
-  secretKey: test
+  secretKey: 3d2ef7bae9c1f8a6d5b4e0c2n1m7k9j8h6
   jwtExpiresMS: 86400000
+  jwtRefreshExpiresMS: 1209600000 # 14 days
 
 
 #logging:

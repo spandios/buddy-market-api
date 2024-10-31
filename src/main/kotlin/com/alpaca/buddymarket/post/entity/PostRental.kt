@@ -5,11 +5,11 @@ import jakarta.persistence.DiscriminatorValue
 import jakarta.persistence.Entity
 
 /**
- * 도움 요청 게시글
+ * 대여 게시글
  */
 @Entity(name = "post_help")
 @DiscriminatorValue("HELP")
-class PostHelp(
+class PostRental(
     creator: User,
     title: String,
     content: String,

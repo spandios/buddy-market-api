@@ -2,11 +2,11 @@ package com.alpaca.buddymarket.post.service
 
 import com.alpaca.buddymarket.config.exception.ErrorCode
 import com.alpaca.buddymarket.config.exception.MyException
+import com.alpaca.buddymarket.post.PostFactoryProvider
 import com.alpaca.buddymarket.post.PostRepository
 import com.alpaca.buddymarket.post.dto.PostCreateDto
 import com.alpaca.buddymarket.post.dto.PostUpdateDto
 import com.alpaca.buddymarket.post.entity.Post
-import com.alpaca.buddymarket.post.factory.PostFactoryProvider
 import com.alpaca.buddymarket.user.UserService
 import org.springframework.stereotype.Service
 
@@ -28,7 +28,7 @@ class PostService(
     fun findByIdOrThrow(id: Long): Post =
         repository.findById(id).orElseThrow {
             throw MyException(ErrorCode.POST_NOT_FOUND)
-        }  
+        }
 
     fun update(
         id: Long,
