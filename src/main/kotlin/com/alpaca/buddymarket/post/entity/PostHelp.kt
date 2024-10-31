@@ -1,7 +1,6 @@
 package com.alpaca.buddymarket.post.entity
 
 import com.alpaca.buddymarket.user.entity.User
-import jakarta.persistence.Column
 import jakarta.persistence.DiscriminatorValue
 import jakarta.persistence.Entity
 
@@ -15,14 +14,14 @@ class PostHelp(
     title: String,
     content: String,
     images: List<String>?,
+    price: Int?,
 ) : Post(
         creator = creator,
         title = title,
         content = content,
         images = images,
+        postType = PostType.HELP,
+        price = price,
     ) {
-    @Column(nullable = true)
-    val price: Int? = null
-
-    val isRequest = false
+    var isRequest = false
 }

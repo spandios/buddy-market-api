@@ -8,8 +8,7 @@ import jakarta.persistence.Entity
 @Entity(name = "post_sale")
 @DiscriminatorValue("SALE")
 class PostSale(
-    @Column(nullable = true)
-    val price: Int,
+    price: Int,
     creator: User,
     title: String,
     content: String,
@@ -19,6 +18,8 @@ class PostSale(
         title = title,
         content = content,
         images = images,
+        postType = PostType.SALE,
+        price = price,
     ) {
     /**
      * 구매 게시글인지 여부

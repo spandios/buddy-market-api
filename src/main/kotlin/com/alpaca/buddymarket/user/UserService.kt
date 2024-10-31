@@ -1,7 +1,7 @@
 package com.alpaca.buddymarket.user
 
-import MyException
 import com.alpaca.buddymarket.config.exception.ErrorCode
+import com.alpaca.buddymarket.config.exception.MyException
 import com.alpaca.buddymarket.user.entity.User
 import org.springframework.stereotype.Service
 

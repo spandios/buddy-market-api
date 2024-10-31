@@ -1,27 +1,26 @@
 package com.alpaca.buddymarket.config.security
 
-import MyException
 import com.alpaca.buddymarket.config.exception.ErrorCode
+import com.alpaca.buddymarket.config.exception.MyException
 import com.alpaca.buddymarket.config.properties.JwtProps
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import jakarta.servlet.http.HttpServletRequest
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.User
 import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
 import java.security.SignatureException
 import java.time.Instant
-<<<<<<< Updated upstream:src/main/kotlin/com/alpaca/buddymarket/config/security/JwtService.kt
-import java.util.Date
-=======
-import java.util.Arrays
-import java.util.Date
+import java.util.*
 import java.util.stream.Collectors
->>>>>>> Stashed changes:src/main/kotlin/com/alpaca/buddymarket/config/security/JwtProvider.kt
 
 @Service
-class JwtService(
+class JwtProvider(
     jwtProps: JwtProps,
 ) {
     private final val accessTokenExpiration = 60 * 60 * 60 // 1 hour MS
@@ -52,7 +51,7 @@ class JwtService(
     ): String =
         generateJwtToken(
             userId,
-            expiration,
+            makeExpiration(expiration),
             authorities,
         )
 
@@ -69,11 +68,11 @@ class JwtService(
         userId: Long,
         authorities: String,
         expiration: Int = refreshTokenExpiration,
-    ): String = generateJwtToken(userId, expiration, authorities)
+    ): String = generateJwtToken(userId, makeExpiration(expiration), authorities)
 
     private fun generateJwtToken(
         userId: Long,
-        expiration: Int,
+        expiration: Date,
         authorities: String,
     ): String {
         val map = HashMap<String, Any>()
@@ -85,9 +84,46 @@ class JwtService(
             .setSubject(userId.toString())
             .addClaims(map)
             .setIssuedAt(Date())
-            .setExpiration(makeExpiration(expiration))
+            .setExpiration(expiration)
             .signWith(key)
             .compact()
+    }
+
+    fun validateJwtToken(token: String): Boolean {
+        try {
+            Jwts
+                .parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+
+            return true
+        } catch (signatureException: SignatureException) {
+            throw MyException(ErrorCode.INVALID_TOKEN, "Invalid token")
+        } catch (expiredJwtException: ExpiredJwtException) {
+            throw MyException(ErrorCode.EXPIRED_TOKEN, "Expired token")
+        } catch (e: Exception) {
+            throw MyException(ErrorCode.INVALID_TOKEN, e.message)
+        }
+    }
+
+    fun getAuthentication(token: String): Authentication {
+        val claims =
+            Jwts
+                .parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .body
+
+        val authorities =
+            Arrays
+                .stream(claims["roles"].toString().split(",").toTypedArray())
+                .map { role: String? -> SimpleGrantedAuthority(role?.let { "USER" }) }
+                .collect(Collectors.toList())
+
+        val principal = User(claims.subject, "", authorities)
+        return UsernamePasswordAuthenticationToken(principal, token, authorities)
     }
 
     fun getBodyFromToken(token: String): Claims =
