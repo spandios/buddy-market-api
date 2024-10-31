@@ -55,10 +55,11 @@ abstract class Post(
         status = PostStatus.RESERVED
     }
 
-    fun remove() {
+    fun remove(): Post {
         status = PostStatus.REMOVED
         isDeleted = true
         deletedAt = LocalDateTime.now()
+        return this
     }
 
     enum class PostStatus {

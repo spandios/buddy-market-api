@@ -1,10 +1,18 @@
 package com.alpaca.buddymarket.user.entity
 
+<<<<<<< Updated upstream
+=======
+import com.alpaca.buddymarket.config.base.BaseEntityWithSoftDelete
+>>>>>>> Stashed changes
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+<<<<<<< Updated upstream
+=======
+import org.hibernate.annotations.SQLRestriction
+>>>>>>> Stashed changes
 
 enum class SnsType {
     KAKAO,

@@ -12,7 +12,13 @@ import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
 import java.security.SignatureException
 import java.time.Instant
+<<<<<<< Updated upstream:src/main/kotlin/com/alpaca/buddymarket/config/security/JwtService.kt
 import java.util.Date
+=======
+import java.util.Arrays
+import java.util.Date
+import java.util.stream.Collectors
+>>>>>>> Stashed changes:src/main/kotlin/com/alpaca/buddymarket/config/security/JwtProvider.kt
 
 @Service
 class JwtService(
@@ -46,7 +52,7 @@ class JwtService(
     ): String =
         generateJwtToken(
             userId,
-            makeExpiration(expiration),
+            expiration,
             authorities,
         )
 
@@ -63,11 +69,11 @@ class JwtService(
         userId: Long,
         authorities: String,
         expiration: Int = refreshTokenExpiration,
-    ): String = generateJwtToken(userId, makeExpiration(expiration), authorities)
+    ): String = generateJwtToken(userId, expiration, authorities)
 
     private fun generateJwtToken(
         userId: Long,
-        expiration: Date,
+        expiration: Int,
         authorities: String,
     ): String {
         val map = HashMap<String, Any>()
@@ -79,7 +85,7 @@ class JwtService(
             .setSubject(userId.toString())
             .addClaims(map)
             .setIssuedAt(Date())
-            .setExpiration(expiration)
+            .setExpiration(makeExpiration(expiration))
             .signWith(key)
             .compact()
     }
