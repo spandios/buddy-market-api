@@ -2,21 +2,20 @@ spring:
   application:
     name: buddy-market
   datasource:
-    url: jdbc:mysql://localhost:3306/buddy-market
-    username: root
-    password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:postgresql://localhost:5432/buddy-market-test
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         default_batch_fetch_size: 1000
         show_sql: true
         format_sql: true
-        dialect: org.hibernate.dialect.MySQL8Dialect
-
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 server:
   error:
@@ -33,3 +32,8 @@ logging:
               trace
       springframework:
         cache: TRACE
+
+jwt:
+  secretKey: 3d2ef7bae9c1f8a6d5b4e0c2n1m7k9j8h6
+  jwtExpiresMS: 86400000
+  jwtRefreshExpiresMS: 1209600000 # 14 days

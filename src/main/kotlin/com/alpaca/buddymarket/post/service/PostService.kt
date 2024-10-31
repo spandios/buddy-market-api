@@ -47,8 +47,6 @@ class PostService(
 
     fun softRemove(id: Long) {
         val entity = findByIdOrThrow(id)
-        repository.save(
-            entity.remove(),
-        )
+        repository.delete(entity)
     }
 }

@@ -2,23 +2,25 @@ import com.alpaca.buddymarket.config.security.JwtProvider
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.springframework.core.annotation.Order
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
-@Order(1)
 @Component
 class JwtAuthenticationFilter(
     private val jwtProvider: JwtProvider,
 ) : OncePerRequestFilter() {
+    val unauthorizedUrl = arrayOf("/v1/auth")
+
+    override fun shouldNotFilter(request: HttpServletRequest): Boolean = unauthorizedUrl.any { request.requestURI.startsWith(it) }
+
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
         filterChain: FilterChain,
     ) {
         try {
-            val token = jwtProvider.extractTokenFrom(request)
+            val token = jwtProvider.extractTokenFrom(request) ?: return
 
             if (token != null && jwtProvider.validateJwtToken(token)) {
                 val authentication = jwtProvider.getAuthentication(token)

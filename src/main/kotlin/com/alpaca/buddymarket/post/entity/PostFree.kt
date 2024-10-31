@@ -16,4 +16,6 @@ class PostFree(
         title = title,
         content = content,
         images = images,
+        postType = PostType.FREE,
+        price = null,
     )

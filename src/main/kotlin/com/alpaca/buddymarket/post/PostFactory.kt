@@ -3,7 +3,7 @@ package com.alpaca.buddymarket.post
 import com.alpaca.buddymarket.post.dto.PostCreateDto
 import com.alpaca.buddymarket.post.entity.Post
 import com.alpaca.buddymarket.post.entity.PostFree
-import com.alpaca.buddymarket.post.entity.PostHelp
+import com.alpaca.buddymarket.post.entity.PostRental
 import com.alpaca.buddymarket.post.entity.PostSale
 import com.alpaca.buddymarket.post.entity.PostType
 import com.alpaca.buddymarket.user.entity.User
@@ -49,7 +49,7 @@ class PostHelpFactory : PostFactory {
     override fun makePost(
         creator: User,
         dto: PostCreateDto,
-    ) = PostHelp(
+    ) = PostRental(
         creator = creator,
         title = dto.title,
         content = dto.content,
