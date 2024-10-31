@@ -1,10 +1,8 @@
 package com.alpaca.buddymarket.user.entity
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
+import com.alpaca.buddymarket.config.base.BaseEntityWithSoftDelete
+import jakarta.persistence.*
+import org.hibernate.annotations.SQLRestriction
 
 enum class SnsType {
     KAKAO,
@@ -12,6 +10,7 @@ enum class SnsType {
 }
 
 @Entity(name = "buser")
+@SQLRestriction("is_deleted = false")
 class User(
     @Column(name = "email")
     val email: String,
@@ -21,7 +20,7 @@ class User(
     val snsType: SnsType,
     @Column(name = "authority")
     val authority: String,
-) {
+) : BaseEntityWithSoftDelete() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0

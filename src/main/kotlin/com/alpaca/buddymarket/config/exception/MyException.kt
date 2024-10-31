@@ -1,6 +1,6 @@
-import com.alpaca.buddymarket.config.exception.ErrorCode
+package com.alpaca.buddymarket.config.exception
 
 class MyException(
-    errorCode: ErrorCode,
+    val errorCode: ErrorCode,
     message: String? = null,
 ) : RuntimeException(message ?: errorCode.message)
